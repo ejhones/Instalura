@@ -1,30 +1,28 @@
 import React, {Component} from 'react';
 import {Text, View, Dimensions, Image, FlatList, StyleSheet} from 'react-native';
-
-const width = Dimensions.get('screen').width;
+import Post from './Post';
 
 export default class Feed extends Component {
-    render(){
-        const fotos = [
-            {id: 1, usuaraio: 'rafael'},
-            {id: 2, usuaraio: 'alberto'},
-            {id: 3, usuaraio: 'vitor'},
-        ];
+    constructor(){
+        super();
+        this.state = {
+            fotos: []
+        }
+    }
 
+    componentDidMount(){
+        fetch('https://instalura-api.herokuapp.com/api/public/fotos/rafael')
+        .then(resposta => resposta.json())
+        .then(json => this.setState({fotos: json}));
+    }
+
+    render(){
         return(
             <FlatList style={styles.container}
                 keyExtractor={item => String(item.id)}
-                data={fotos}
+                data={this.state.fotos}
                 renderItem={({item}) => 
-                <View>
-                    <View style={styles.cabecalho}>
-                        <Image source={require('../../resources/img/alura.png')}
-                        style={styles.fotoDePerfil} />
-                        <Text>{item.usuaraio}</Text>
-                    </View>
-                    <Image source={require('../../resources/img/alura.png')}
-                    style={styles.foto} />
-                </View>
+                <Post foto={item}/>
             }/>
         );
     }
@@ -33,20 +31,5 @@ export default class Feed extends Component {
 const styles = StyleSheet.create({
     container: {
         marginTop: 20
-    },
-    cabecalho:{
-        margin: 10,
-        flexDirection: 'row',
-        alignItems: 'center'
-    },
-    fotoDePerfil:{
-        marginRight: 10,
-        borderRadius: 20,
-        width: 40,
-        height: 40
-    },
-    foto: {
-        width: width,
-        height: width
     }
 });
