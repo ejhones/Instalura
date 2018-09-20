@@ -83,6 +83,13 @@ export default class Post extends Component {
                     </TouchableOpacity>
                     {this.exibeLikes(foto)}
                     {this.exibeLegenda(foto)}
+
+                    {foto.comentarios.map(comentario => 
+                        <View style={styles.comentario} key={comentario.id}>
+                            <Text style={styles.tituloComentario}>{comentario.login}</Text>
+                            <Text>{comentario.texto}</Text>
+                        </View>
+                    )}
                 </View>
             </View>
         );
