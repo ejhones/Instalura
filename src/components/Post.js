@@ -5,6 +5,7 @@ import { Text, View, Dimensions, Image, StyleSheet, TouchableOpacity } from 'rea
 const width = Dimensions.get('screen').width;
 
 export default class Post extends Component {
+   
     constructor(props) {
         super(props);
         this.state = {
@@ -13,9 +14,24 @@ export default class Post extends Component {
     }
 
     like = () => {
+        const { foto } = this.state;
+1
+        let novaLista = [];
+        if (!foto.likeada) {
+            novaLista = [
+                ...foto.likers,
+                {login : 'meuUsuario'}
+            ];
+        }else{
+            novaLista = foto.likers.filter(liker => {
+                return liker.login !== 'meuUsuario'
+            });
+        }
+
         const fotoAtualizada = {
-            ...this.state.foto,
-            likeada: !this.state.foto.likeada
+            ...foto,
+            likeada: !foto.likeada,
+            likers: novaLista
         }
         this.setState({ foto: fotoAtualizada })
     }
@@ -25,8 +41,8 @@ export default class Post extends Component {
             require('../../resources/img/s2.png');
     }
 
-    exibeLikes(likers) {
-        if (likers.length <= 0)
+    exibeLikes(foto) {
+        if (foto.likers.length <= 0)
             return;
 
         return (
@@ -65,7 +81,7 @@ export default class Post extends Component {
                         <Image style={styles.botaoLike}
                             source={this.carregaIcone(foto.likeada)} />
                     </TouchableOpacity>
-                    {this.exibeLikes(foto.likers)}
+                    {this.exibeLikes(foto)}
                     {this.exibeLegenda(foto)}
                 </View>
             </View>
