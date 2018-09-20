@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, Dimensions, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, View, Dimensions, Image, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 
 
 const width = Dimensions.get('screen').width;
@@ -9,8 +9,28 @@ export default class Post extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            foto: this.props.foto
+            foto: this.props.foto,
+            valorComentario:''
         }
+    }
+
+    adicionarComentario = () =>{
+        if (this.state.inputComentario === '') 
+            return;
+
+        const novaLista = [ ...this.state.foto.comentarios, {
+            id: this.state.valorComentario,
+            login: 'meuUsuario',
+            texto: this.state.valorComentario
+        }];
+
+        const fotoAtualizada ={
+            ...this.state.foto,
+            comentarios: novaLista
+        }
+
+        this.setState({foto: fotoAtualizada, valorComentario: ''});
+        this.inputComentario.clear();
     }
 
     like = () => {
@@ -91,6 +111,15 @@ export default class Post extends Component {
                         </View>
                     )}
                 </View>
+                <View style={styles.novoComentario}>
+                    <TextInput style={styles.input}
+                        ref={input => this.inputComentario =input }
+                        placeholder="Adicione um comentario ... " 
+                        onChangeText={texto => this.setState({valorComentario: texto})}/>
+                    <TouchableOpacity onPress={this.adicionarComentario}>
+                        <Image style={styles.icone} source={require('../../resources/img/send.png')} />
+                    </TouchableOpacity>
+                </View>
             </View>
         );
     }
@@ -128,5 +157,19 @@ const styles = StyleSheet.create({
     tituloComentario:{
         fontWeight: 'bold',
         marginRight: 5
+    },
+    input:{
+        flex: 1,
+        height: 40
+    },
+    icone:{
+        height: 30,
+        width: 30
+    },
+    novoComentario:{
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderBottomWidth: 1,
+        borderBottomColor: '#ddd'
     }
 });
