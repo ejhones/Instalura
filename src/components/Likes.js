@@ -20,7 +20,7 @@ export default class Likes extends Component {
 
     render() {
         const { foto, likeCallback } = this.props;
-        
+
         return (
 
             <View>
@@ -32,8 +32,6 @@ export default class Likes extends Component {
                 {this.exibeLikes(foto)}
             </View>
         );
-
-
     }
 }
 
