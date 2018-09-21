@@ -6,12 +6,9 @@ import Likes from './Likes';
 const width = Dimensions.get('screen').width;
 
 export default class Post extends Component {
-   
+ 
     constructor(props) {
         super(props);
-        this.state = {
-            foto: this.props.foto
-        }
     }
 
     adicionaComentario = (valorComentario, inputComentario) =>{
@@ -33,28 +30,6 @@ export default class Post extends Component {
         inputComentario.clear();
     }
 
-    like = () => {
-        const { foto } = this.state;
-1
-        let novaLista = [];
-        if (!foto.likeada) {
-            novaLista = [
-                ...foto.likers,
-                {login : 'meuUsuario'}
-            ];
-        }else{
-            novaLista = foto.likers.filter(liker => {
-                return liker.login !== 'meuUsuario'
-            });
-        }
-
-        const fotoAtualizada = {
-            ...foto,
-            likeada: !foto.likeada,
-            likers: novaLista
-        }
-        this.setState({ foto: fotoAtualizada })
-    }
 
     exibeLegenda(foto) {
         if (foto.comentario === '')
@@ -69,7 +44,7 @@ export default class Post extends Component {
     }
 
     render() {
-        const { foto } = this.state;
+        const {likeCallback, foto} = this.props;
 
         return (
             <View>
@@ -81,7 +56,7 @@ export default class Post extends Component {
                 <Image source={{ uri: this.props.foto.urlFoto }}
                     style={styles.foto} />
                 <View style={styles.rodape}>
-                    <Likes foto={foto} likeCallback={this.like}/>
+                    <Likes foto={foto} likeCallback={likeCallback}/>
                     {this.exibeLegenda(foto)}
 
                     {foto.comentarios.map(comentario => 
