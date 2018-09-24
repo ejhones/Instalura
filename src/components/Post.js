@@ -11,26 +11,6 @@ export default class Post extends Component {
         super(props);
     }
 
-    adicionaComentario = (valorComentario, inputComentario) =>{
-        if (valorComentario === '') 
-            return;
-
-        const novaLista = [ ...this.state.foto.comentarios, {
-            id: valorComentario,
-            login: 'meuUsuario',
-            texto: valorComentario
-        }];
-
-        const fotoAtualizada ={
-            ...this.state.foto,
-            comentarios: novaLista
-        }
-
-        this.setState({foto: fotoAtualizada});
-        inputComentario.clear();
-    }
-
-
     exibeLegenda(foto) {
         if (foto.comentario === '')
             return;
@@ -44,7 +24,7 @@ export default class Post extends Component {
     }
 
     render() {
-        const {likeCallback, foto} = this.props;
+        const {likeCallback, foto, comentarioCallback} = this.props;
 
         return (
             <View>
@@ -67,7 +47,7 @@ export default class Post extends Component {
                     )}
                 </View>
                 <InputComentario 
-                    comentarioCallback={this.adicionaComentario} />
+                    comentarioCallback={comentarioCallback} idFoto={foto.id}/>
             </View>
         );
     }
