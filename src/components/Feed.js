@@ -10,12 +10,23 @@ export default class Feed extends Component {
         }
     }
 
+    buscaPorId(idFoto){
+        return this.state.fotos
+        .find(foto => foto.id === idFoto);
+    }
+
+    atualizaFotos(fotoAtualizada){
+        const fotos = this.state.fotos
+            .map(foto => foto.id === fotoAtualizada.id ? fotoAtualizada : foto);
+
+        this.setState({ fotos });
+    }
+
     adicionaComentario = (idFoto, valorComentario, inputComentario) => {
         if (valorComentario === '')
             return;
 
-        const foto = this.state.fotos
-            .find(foto => foto.id === idFoto);
+        const foto = this.buscaPorId(idFoto);
 
         const novaLista = [...foto.comentarios, {
             id: valorComentario,
@@ -28,16 +39,13 @@ export default class Feed extends Component {
             comentarios: novaLista
         }
 
-        const fotos = this.state.fotos
-            .map(foto => foto.id === fotoAtualizada.id ? fotoAtualizada : foto);
-
-        this.setState({ fotos });
+        this.atualizaFotos(fotoAtualizada);
+        
         inputComentario.clear();
     }
 
     like = (idFoto) => {
-        const foto = this.state.fotos
-            .find(foto => foto.id === idFoto);
+        const foto = this.buscaPorId(idFoto);
 
         let novaLista = [];
         if (!foto.likeada) {
@@ -57,10 +65,7 @@ export default class Feed extends Component {
             likers: novaLista
         }
 
-        const fotos = this.state.fotos
-            .map(foto => foto.id === fotoAtualizada.id ? fotoAtualizada : foto);
-
-        this.setState({ fotos });
+        this.atualizaFotos(fotoAtualizada);
     }
 
     componentDidMount() {
