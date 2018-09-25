@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, TextInput, StyleSheet, Dimensions, Button, Text } from 'react-native';
+import { View, TextInput, StyleSheet, Dimensions, Button, Text, AsyncStorage } from 'react-native';
 
 const width = Dimensions.get('screen').width;
 
@@ -7,8 +7,9 @@ export default class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            usuario: "",
-            senha: ""
+            usuario: 'Rafael',
+            senha: '123456',
+            mensagem: ''
         }
     }
 
@@ -34,7 +35,13 @@ export default class Login extends Component {
 
                 throw new Error('Não foi possível efetuar login');
             })
-            .then(token => console.warn(token));
+            .then(token =>{
+                AsyncStorage.setItem('token', token);
+                AsyncStorage.setItem('usuario', this.state.usuario);
+                const getToken = AsyncStorage.getItem('token');
+                alert(getToken);
+            })
+            .catch(error => this.setState({mensagem : error.mensagem}));
     }
 
     render() {
@@ -44,13 +51,17 @@ export default class Login extends Component {
                 <View style={styles.form}>
                     <TextInput style={styles.input}
                         placeholder="usuário ..."
+                        defaultValue='Rafael'
                         onChangeText={texto => this.setState({ usuario: texto })} />
                     <TextInput style={styles.input}
                         placeholder="senha ..."
+                        defaultValue='123456'
+                        secureTextEntry={true}
                         onChangeText={texto => this.setState({ senha: texto })} />
                     <Button title="Login"
                         onPress={this.efetuaLogin} />
                 </View>
+                <Text style={styles.mensagem}>{this.state.mensagem}</Text>
             </View >
         );
     }
@@ -73,5 +84,9 @@ const styles = StyleSheet.create({
     titulo: {
         fontWeight: 'bold',
         fontSize: 26
+    }, 
+    mensagem: {
+        marginTop: 15,
+        color:'#e74c3c'
     }
 });
