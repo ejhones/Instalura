@@ -3,8 +3,8 @@ import { FlatList, StyleSheet, Platform } from 'react-native';
 import Post from './Post';
 
 export default class Feed extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             fotos: []
         }
